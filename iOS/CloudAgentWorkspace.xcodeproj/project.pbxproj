@@ -1,0 +1,547 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AB1001A0 /* CloudAgentWorkspaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001A1 /* CloudAgentWorkspaceApp.swift */; };
+		AB1001A2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001A3 /* ContentView.swift */; };
+		AB1001A4 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001A5 /* HomeView.swift */; };
+		AB1001A6 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001A7 /* HomeViewModel.swift */; };
+		AB1001A8 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001A9 /* HeaderView.swift */; };
+		AB1001AA /* WorkspacesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001AB /* WorkspacesSection.swift */; };
+		AB1001AC /* RecentProjectsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001AD /* RecentProjectsSection.swift */; };
+		AB1001AE /* AIModelSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001AF /* AIModelSelector.swift */; };
+		AB1001B0 /* FilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001B1 /* FilesView.swift */; };
+		AB1001B2 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001B3 /* ChatView.swift */; };
+		AB1001B4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001B5 /* SettingsView.swift */; };
+		AB1001B6 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001B7 /* Workspace.swift */; };
+		AB1001B8 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001B9 /* Project.swift */; };
+		AB1001BA /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001BB /* APIClient.swift */; };
+		AB1001BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB1001BD /* LaunchScreen.storyboard */; };
+		AB1001C4 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001C5 /* ChatMessage.swift */; };
+		AB1001C6 /* ChatHeaderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001C7 /* ChatHeaderBar.swift */; };
+		AB1001C8 /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001C9 /* ChatBubble.swift */; };
+		AB1001CA /* ChatActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001CB /* ChatActionRow.swift */; };
+		AB1001CC /* ChatInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001CD /* ChatInputBar.swift */; };
+		AB1001CE /* ChangeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1001CF /* ChangeCard.swift */; };
+		AB100200 /* AnthropicError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100201 /* AnthropicError.swift */; };
+		AB100202 /* APIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100203 /* APIKeyStore.swift */; };
+		AB100204 /* SystemPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100205 /* SystemPrompt.swift */; };
+		AB100206 /* SSEParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100207 /* SSEParser.swift */; };
+		AB100208 /* ToolUseAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100209 /* ToolUseAccumulator.swift */; };
+		AB10020A /* AnthropicClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB10020B /* AnthropicClient.swift */; };
+		AB10020C /* JSONValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB10020D /* JSONValue.swift */; };
+		AB10020E /* ContentBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB10020F /* ContentBlock.swift */; };
+		AB100210 /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100211 /* Tools.swift */; };
+		AB100212 /* MessagesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100213 /* MessagesRequest.swift */; };
+		AB100214 /* MessagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100215 /* MessagesResponse.swift */; };
+		AB100216 /* StreamEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB100217 /* StreamEvent.swift */; };
+		AB10021A /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB10021B /* ChatViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AB1001A1 /* CloudAgentWorkspaceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAgentWorkspaceApp.swift; sourceTree = "<group>"; };
+		AB1001A3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AB1001A5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		AB1001A7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		AB1001A9 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		AB1001AB /* WorkspacesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspacesSection.swift; sourceTree = "<group>"; };
+		AB1001AD /* RecentProjectsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentProjectsSection.swift; sourceTree = "<group>"; };
+		AB1001AF /* AIModelSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModelSelector.swift; sourceTree = "<group>"; };
+		AB1001B1 /* FilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesView.swift; sourceTree = "<group>"; };
+		AB1001B3 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		AB1001B5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AB1001B7 /* Workspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workspace.swift; sourceTree = "<group>"; };
+		AB1001B9 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		AB1001BB /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		AB1001BD /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AB1001BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB1001BF /* CloudAgentWorkspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudAgentWorkspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB1001C5 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		AB1001C7 /* ChatHeaderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHeaderBar.swift; sourceTree = "<group>"; };
+		AB1001C9 /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
+		AB1001CB /* ChatActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatActionRow.swift; sourceTree = "<group>"; };
+		AB1001CD /* ChatInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputBar.swift; sourceTree = "<group>"; };
+		AB1001CF /* ChangeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCard.swift; sourceTree = "<group>"; };
+		AB100201 /* AnthropicError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicError.swift; sourceTree = "<group>"; };
+		AB100203 /* APIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyStore.swift; sourceTree = "<group>"; };
+		AB100205 /* SystemPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPrompt.swift; sourceTree = "<group>"; };
+		AB100207 /* SSEParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEParser.swift; sourceTree = "<group>"; };
+		AB100209 /* ToolUseAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolUseAccumulator.swift; sourceTree = "<group>"; };
+		AB10020B /* AnthropicClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicClient.swift; sourceTree = "<group>"; };
+		AB10020D /* JSONValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValue.swift; sourceTree = "<group>"; };
+		AB10020F /* ContentBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlock.swift; sourceTree = "<group>"; };
+		AB100211 /* Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
+		AB100213 /* MessagesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRequest.swift; sourceTree = "<group>"; };
+		AB100215 /* MessagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesResponse.swift; sourceTree = "<group>"; };
+		AB100217 /* StreamEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamEvent.swift; sourceTree = "<group>"; };
+		AB10021B /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AB1001C0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AB1001D0 = {
+			isa = PBXGroup;
+			children = (
+				AB1001D1 /* CloudAgentWorkspace */,
+				AB1001D2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AB1001D1 /* CloudAgentWorkspace */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001A1 /* CloudAgentWorkspaceApp.swift */,
+				AB1001D3 /* Views */,
+				AB10021C /* ViewModels */,
+				AB1001D9 /* Models */,
+				AB1001DB /* Services */,
+				AB1001DD /* Resources */,
+			);
+			path = CloudAgentWorkspace;
+			sourceTree = "<group>";
+		};
+		AB10021C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AB10021B /* ChatViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AB1001D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001BF /* CloudAgentWorkspace.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AB1001D3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001A3 /* ContentView.swift */,
+				AB1001D4 /* Home */,
+				AB1001B1 /* FilesView.swift */,
+				AB1001D5 /* Chat */,
+				AB1001D6 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AB1001D4 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001A5 /* HomeView.swift */,
+				AB1001A7 /* HomeViewModel.swift */,
+				AB1001A9 /* HeaderView.swift */,
+				AB1001AB /* WorkspacesSection.swift */,
+				AB1001AD /* RecentProjectsSection.swift */,
+				AB1001AF /* AIModelSelector.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		AB1001D5 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001B3 /* ChatView.swift */,
+				AB1001C7 /* ChatHeaderBar.swift */,
+				AB1001C9 /* ChatBubble.swift */,
+				AB1001CB /* ChatActionRow.swift */,
+				AB1001CD /* ChatInputBar.swift */,
+				AB1001CF /* ChangeCard.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		AB1001D6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001B5 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		AB1001D9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001B7 /* Workspace.swift */,
+				AB1001B9 /* Project.swift */,
+				AB1001C5 /* ChatMessage.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AB1001DB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001BB /* APIClient.swift */,
+				AB100218 /* Anthropic */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AB100218 /* Anthropic */ = {
+			isa = PBXGroup;
+			children = (
+				AB100201 /* AnthropicError.swift */,
+				AB100203 /* APIKeyStore.swift */,
+				AB100205 /* SystemPrompt.swift */,
+				AB100207 /* SSEParser.swift */,
+				AB100209 /* ToolUseAccumulator.swift */,
+				AB10020B /* AnthropicClient.swift */,
+				AB100219 /* Models */,
+			);
+			path = Anthropic;
+			sourceTree = "<group>";
+		};
+		AB100219 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AB10020D /* JSONValue.swift */,
+				AB10020F /* ContentBlock.swift */,
+				AB100211 /* Tools.swift */,
+				AB100213 /* MessagesRequest.swift */,
+				AB100215 /* MessagesResponse.swift */,
+				AB100217 /* StreamEvent.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AB1001DD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AB1001BE /* Info.plist */,
+				AB1001BD /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AB1001C1 /* CloudAgentWorkspace */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB1001E0 /* Build configuration list for PBXNativeTarget "CloudAgentWorkspace" */;
+			buildPhases = (
+				AB1001C2 /* Sources */,
+				AB1001C0 /* Frameworks */,
+				AB1001C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CloudAgentWorkspace;
+			productName = CloudAgentWorkspace;
+			productReference = AB1001BF /* CloudAgentWorkspace.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AB1001D7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					AB1001C1 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = AB1001DA /* Build configuration list for PBXProject "CloudAgentWorkspace" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AB1001D0;
+			productRefGroup = AB1001D2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AB1001C1 /* CloudAgentWorkspace */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AB1001C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB1001BC /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AB1001C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB1001A0 /* CloudAgentWorkspaceApp.swift in Sources */,
+				AB1001A2 /* ContentView.swift in Sources */,
+				AB1001A4 /* HomeView.swift in Sources */,
+				AB1001A6 /* HomeViewModel.swift in Sources */,
+				AB1001A8 /* HeaderView.swift in Sources */,
+				AB1001AA /* WorkspacesSection.swift in Sources */,
+				AB1001AC /* RecentProjectsSection.swift in Sources */,
+				AB1001AE /* AIModelSelector.swift in Sources */,
+				AB1001B0 /* FilesView.swift in Sources */,
+				AB1001B2 /* ChatView.swift in Sources */,
+				AB1001B4 /* SettingsView.swift in Sources */,
+				AB1001B6 /* Workspace.swift in Sources */,
+				AB1001B8 /* Project.swift in Sources */,
+				AB1001BA /* APIClient.swift in Sources */,
+				AB1001C4 /* ChatMessage.swift in Sources */,
+				AB1001C6 /* ChatHeaderBar.swift in Sources */,
+				AB1001C8 /* ChatBubble.swift in Sources */,
+				AB1001CA /* ChatActionRow.swift in Sources */,
+				AB1001CC /* ChatInputBar.swift in Sources */,
+				AB1001CE /* ChangeCard.swift in Sources */,
+				AB100200 /* AnthropicError.swift in Sources */,
+				AB100202 /* APIKeyStore.swift in Sources */,
+				AB100204 /* SystemPrompt.swift in Sources */,
+				AB100206 /* SSEParser.swift in Sources */,
+				AB100208 /* ToolUseAccumulator.swift in Sources */,
+				AB10020A /* AnthropicClient.swift in Sources */,
+				AB10020C /* JSONValue.swift in Sources */,
+				AB10020E /* ContentBlock.swift in Sources */,
+				AB100210 /* Tools.swift in Sources */,
+				AB100212 /* MessagesRequest.swift in Sources */,
+				AB100214 /* MessagesResponse.swift in Sources */,
+				AB100216 /* StreamEvent.swift in Sources */,
+				AB10021A /* ChatViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AB1001E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_DIALECT = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_DIALECT = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		AB1001E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_DIALECT = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_DIALECT = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.9;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AB1001E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CloudAgentWorkspace/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CloudAgent Workspace";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cloudagent.workspace";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AB1001E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CloudAgentWorkspace/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CloudAgent Workspace";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cloudagent.workspace";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AB1001DA /* Build configuration list for PBXProject "CloudAgentWorkspace" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB1001E1 /* Debug */,
+				AB1001E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB1001E0 /* Build configuration list for PBXNativeTarget "CloudAgentWorkspace" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB1001E3 /* Debug */,
+				AB1001E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AB1001D7 /* Project object */;
+}

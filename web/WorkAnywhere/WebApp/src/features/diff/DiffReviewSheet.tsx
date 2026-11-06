@@ -36,7 +36,7 @@ interface FilePreview {
   bareBadge?: "create" | "delete" | "rewrite";
 }
 
-export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsumed }: Props): JSX.Element {
+export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsumed }: Props): JSX.Element | null {
   // When open: fetch each file's current content (except `create`), compute preview.
   const [previews, setPreviews] = useState<FilePreview[]>([]);
   const [loadingPreviews, setLoadingPreviews] = useState(false);

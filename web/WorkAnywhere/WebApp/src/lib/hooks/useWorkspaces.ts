@@ -5,9 +5,9 @@
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { getControlPlane } from "@/lib/api";
-import type { ListWorkspacesParams, Workspace } from "@/lib/api/types";
+import type { ListWorkspacesParams, ListWorkspacesResponse, Workspace } from "@/lib/api/types";
 
-export function useWorkspaces(params?: ListWorkspacesParams): UseQueryResult<Workspace[]> {
+export function useWorkspaces(params?: ListWorkspacesParams): UseQueryResult<ListWorkspacesResponse> {
   return useQuery({
     queryKey: ["workspaces", params ?? {}],
     queryFn: async () => {

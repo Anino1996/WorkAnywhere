@@ -36,7 +36,6 @@ export function HomeScreen(): JSX.Element {
   const openCreate = useUIStore((s) => s.openCreate);
   const closeCreate = useUIStore((s) => s.closeCreate);
   const aiModel = useUIStore((s) => s.aiModel);
-  const setAiModel = useUIStore((s) => s.setAiModel);
   const openModelSelector = useUIStore((s) => s.openModelSelector);
   const session = useAuthStore((s) => s.session);
 

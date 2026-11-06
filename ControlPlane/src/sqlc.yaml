@@ -1,0 +1,12 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "internal/store/queries/"
+    schema:  "internal/store/migrations/"
+    gen:
+      go:
+        package:              "db"
+        out:                  "internal/store/db"
+        emit_params_struct_pointers: false
+        emit_result_struct_pointers: false
+        emit_methods_with_db_argument: false

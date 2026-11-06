@@ -1,0 +1,175 @@
+openapi: 3.0.3
+
+info:
+  title: CloudAgent Workspace — Control Plane API
+  version: 0.1.0
+
+servers:
+  - url: /api/v1
+
+security:
+  - BearerAuth: []
+
+paths:
+
+  /operations/{operation_id}:
+    get:
+      summary: Get operation
+      description: |
+        Polls the status of an async operation. When status is COMPLETED or FAILED
+        the operation will not change further.
+      operationId: getOperation
+      parameters:
+        - name: operation_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Operation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /workspaces:
+    post:
+      summary: Create workspace
+      description: |
+        Provisions a new workspace container. Async — poll the returned
+        `operation_id` via GET /operations/{operation_id} until COMPLETED or FAILED.
+      operationId: createWorkspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkspaceRequest'
+      responses:
+        '202':
+          description: Workspace provisioning started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateWorkspaceResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+
+    CreateWorkspaceRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          example: my-workspace
+
+    CreateWorkspaceResponse:
+      type: object
+      required: [workspace_id, status, operation_id, created_at]
+      properties:
+        workspace_id:
+          type: string
+          example: ws_abc123
+        status:
+          type: string
+          enum: [PROVISIONING]
+        operation_id:
+          type: string
+          example: op_xyz789
+        created_at:
+          type: string
+          format: date-time
+
+    OperationResponse:
+      type: object
+      required: [operation_id, workspace_id, type, status, started_at]
+      properties:
+        operation_id:
+          type: string
+        workspace_id:
+          type: string
+        type:
+          type: string
+          enum: [PROVISION]
+        status:
+          type: string
+          enum: [PENDING, IN_PROGRESS, COMPLETED, FAILED]
+        started_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              example: CONTAINER_EXITED
+            message:
+              type: string
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message, request_id]
+          properties:
+            code:
+              type: string
+              example: INVALID_REQUEST_BODY
+            message:
+              type: string
+              example: field 'name' is required
+            request_id:
+              type: string
+              example: req_def456
+
+  responses:
+    BadRequest:
+      description: Invalid request body or params
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid auth token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal control plane error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

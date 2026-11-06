@@ -1,0 +1,304 @@
+openapi: 3.0.3
+info:
+  title: WorkAnywhere DataPlane Agent API
+  description: In-container workspace agent. Provides file system access and health checks for AI coding agents and clients (iOS, web, CLI).
+  version: 0.1.0
+
+servers:
+  - url: https://workspace-{workspaceId}.data.example.com
+    variables:
+      workspaceId:
+        description: The workspace ID issued by the ControlPlane
+        default: ""
+
+security:
+  - bearerAuth: []
+
+paths:
+  /v1/fs/{path}:
+    parameters:
+      - $ref: "#/components/parameters/FilePath"
+
+    get:
+      summary: Read file
+      operationId: readFile
+      responses:
+        "200":
+          description: Full file contents
+          headers:
+            ETag:
+              description: Opaque content hash for use with If-Match on writes
+              schema:
+                type: string
+            Content-Type:
+              description: Always application/octet-stream — never inferred
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      summary: Write file
+      operationId: writeFile
+      description: Creates or overwrites a file atomically (temp file + rename). Supply If-Match with a previous ETag to perform a compare-and-swap — rejects with 412 if the file was modified since the ETag was issued.
+      parameters:
+        - name: If-Match
+          in: header
+          description: ETag from a prior readFile. If present, write is conditional.
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: File written
+          headers:
+            ETag:
+              description: ETag of the newly written content
+              schema:
+                type: string
+            X-File-Size:
+              description: Size of the written file in bytes
+              schema:
+                type: integer
+                format: int64
+        "201":
+          description: File created (did not previously exist)
+          headers:
+            ETag:
+              schema:
+                type: string
+            X-File-Size:
+              description: Size of the written file in bytes
+              schema:
+                type: integer
+                format: int64
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "412":
+          $ref: "#/components/responses/PreconditionFailed"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+
+    delete:
+      summary: Delete file
+      operationId: deleteFile
+      responses:
+        "204":
+          description: File deleted
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/dirs/{path}:
+    parameters:
+      - $ref: "#/components/parameters/DirPath"
+
+    get:
+      summary: List directory
+      operationId: listDirectory
+      responses:
+        "200":
+          description: Directory entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DirectoryListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /healthz:
+    get:
+      summary: Liveness probe
+      operationId: healthz
+      description: Unauthenticated. Returns 200 if the agent process is alive.
+      security: []
+      responses:
+        "200":
+          description: Agent is alive
+
+  /readyz:
+    get:
+      summary: Readiness probe
+      operationId: readyz
+      description: Authenticated. Returns 200 if the agent is ready to serve requests (workspace root mounted, token key loaded).
+      responses:
+        "200":
+          description: Agent is ready
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "503":
+          description: Agent not yet ready
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Short-lived JWT minted by the ControlPlane. Claims — sub (workspace_id), aud (dataplane), exp.
+
+  parameters:
+    FilePath:
+      name: path
+      in: path
+      required: true
+      description: Absolute path within the workspace root. Must not escape the workspace root via traversal or symlinks.
+      schema:
+        type: string
+        example: "src/main.go"
+
+    DirPath:
+      name: path
+      in: path
+      required: true
+      description: Absolute path to a directory within the workspace root.
+      schema:
+        type: string
+        example: "src"
+
+  schemas:
+    DirectoryEntry:
+      type: object
+      required:
+        - name
+        - type
+        - size
+        - modified_at
+      properties:
+        name:
+          type: string
+          example: "main.go"
+        type:
+          type: string
+          enum:
+            - file
+            - dir
+            - symlink
+        size:
+          type: integer
+          format: int64
+          description: File size in bytes. Zero for directories.
+          example: 2048
+        modified_at:
+          type: string
+          format: date-time
+
+    DirectoryListResponse:
+      type: object
+      required:
+        - path
+        - entries
+      properties:
+        path:
+          type: string
+          example: "src"
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/DirectoryEntry"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+            - request_id
+          properties:
+            code:
+              type: string
+              example: "PATH_TRAVERSAL"
+            message:
+              type: string
+              example: "path escapes workspace root"
+            request_id:
+              type: string
+
+  responses:
+    BadRequest:
+      description: Invalid request (malformed path, traversal attempt, etc.)
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    Unauthorized:
+      description: Missing or invalid Bearer token
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: 'Bearer error="invalid_token"'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    Forbidden:
+      description: Path escapes the workspace root
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    NotFound:
+      description: File or directory does not exist
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    PreconditionFailed:
+      description: If-Match ETag did not match current file — concurrent write detected
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    PayloadTooLarge:
+      description: Request body exceeds the configured file size limit
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"

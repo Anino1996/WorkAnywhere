@@ -28,6 +28,7 @@ func NewFS(root string) *FSHandler {
 
 func (h *FSHandler) Get(w http.ResponseWriter, r *http.Request) {
 	absolutePath, err := h.resolve(r)
+
 	if err != nil {
 		writeError(w, r, http.StatusForbidden, "PATH_TRAVERSAL", "path traversal detected")
 		return
@@ -38,14 +39,17 @@ func (h *FSHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	f, err := os.Open(absolutePath)
+
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			writeError(w, r, http.StatusNotFound, "FILE_NOT_FOUND", "file not found")
 			return
 		}
+
 		writeError(w, r, http.StatusInternalServerError, "READ_ERROR", "failed to read file")
 		return
 	}
+
 	defer f.Close()
 
 	w.Header().Set("Content-Type", "application/octet-stream")
@@ -55,17 +59,21 @@ func (h *FSHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 func (h *FSHandler) Put(w http.ResponseWriter, r *http.Request) {
 	absolutePath, err := h.resolve(r)
+
 	if err != nil {
 		writeError(w, r, http.StatusForbidden, "PATH_TRAVERSAL", "path traversal detected")
 		return
 	}
 
 	ifMatch := r.Header.Get("If-Match")
+
 	if ifMatch != "" {
 		currentEtag, xattrErr := xattr.Get(absolutePath, etagAttr)
+
 		if xattrErr != nil {
 			currentEtag = ""
 		}
+
 		if ifMatch != currentEtag {
 			writeError(w, r, http.StatusPreconditionFailed, "PRECONDITION_FAILED", "ETag mismatch")
 			return
@@ -81,19 +89,23 @@ func (h *FSHandler) Put(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tempFile, err := os.CreateTemp(filepath.Dir(absolutePath), ".tmp-*")
+
 	if err != nil {
 		writeError(w, r, http.StatusInternalServerError, "WRITE_ERROR", "failed to create temp file")
 		return
 	}
+
 	tempFilePath := tempFile.Name()
 	defer os.Remove(tempFilePath)
 
 	hasher := xxhash.New()
+
 	if _, err := io.Copy(tempFile, io.TeeReader(r.Body, hasher)); err != nil {
 		tempFile.Close()
 		writeError(w, r, http.StatusInternalServerError, "WRITE_ERROR", "failed to write file")
 		return
 	}
+
 	tempFile.Close()
 
 	if err := os.Rename(tempFilePath, absolutePath); err != nil {
@@ -102,6 +114,7 @@ func (h *FSHandler) Put(w http.ResponseWriter, r *http.Request) {
 	}
 
 	info, err := os.Stat(absolutePath)
+
 	if err != nil {
 		writeError(w, r, http.StatusInternalServerError, "WRITE_ERROR", "failed to stat written file")
 		return
@@ -112,6 +125,7 @@ func (h *FSHandler) Put(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("ETag", etag)
 	w.Header().Set("X-File-Size", fmt.Sprintf("%d", info.Size()))
+
 	if isNew {
 		w.WriteHeader(http.StatusCreated)
 	} else {
@@ -121,6 +135,7 @@ func (h *FSHandler) Put(w http.ResponseWriter, r *http.Request) {
 
 func (h *FSHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	absolutePath, err := h.resolve(r)
+
 	if err != nil {
 		writeError(w, r, http.StatusForbidden, "PATH_TRAVERSAL", "path traversal detected")
 		return
@@ -131,6 +146,7 @@ func (h *FSHandler) Delete(w http.ResponseWriter, r *http.Request) {
 			writeError(w, r, http.StatusNotFound, "FILE_NOT_FOUND", "file not found")
 			return
 		}
+
 		writeError(w, r, http.StatusInternalServerError, "DELETE_ERROR", "failed to delete file")
 		return
 	}

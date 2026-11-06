@@ -22,10 +22,12 @@ type WorkspaceHandler struct {
 
 func (h *WorkspaceHandler) CreateWorkspace(w http.ResponseWriter, r *http.Request) {
 	var req models.CreateWorkspaceRequest
+
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		models.WriteError(w, http.StatusBadRequest, "INVALID_REQUEST_BODY", err.Error(), httputil.ReqID(r))
 		return
 	}
+
 	if req.Name == "" {
 		models.WriteError(w, http.StatusBadRequest, "INVALID_REQUEST_BODY", "field 'name' is required", httputil.ReqID(r))
 		return
@@ -34,6 +36,7 @@ func (h *WorkspaceHandler) CreateWorkspace(w http.ResponseWriter, r *http.Reques
 	accountID := httputil.AccountID(r)
 
 	resourceID, err := h.Container.CreateContainer(r.Context(), req.Name)
+
 	if err != nil {
 		models.WriteError(w, http.StatusInternalServerError, "CONTAINER_CREATE_FAILED", err.Error(), httputil.ReqID(r))
 		return

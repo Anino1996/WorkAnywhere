@@ -17,17 +17,21 @@ func toWorkspace(row db.Workspace) domain.Workspace {
 		ETag:       row.Etag,
 		CreatedAt:  row.CreatedAt,
 	}
+
 	if row.DeletedAt.Valid {
 		ws.DeletedAt = &row.DeletedAt.Time
 	}
+
 	return ws
 }
 
 func fromWorkspace(ws domain.Workspace, etag string) db.CreateWorkspaceParams {
 	var deletedAt sql.NullTime
+
 	if ws.DeletedAt != nil {
 		deletedAt = sql.NullTime{Time: *ws.DeletedAt, Valid: true}
 	}
+
 	return db.CreateWorkspaceParams{
 		ID:         ws.ID,
 		Name:       ws.Name,
@@ -51,28 +55,35 @@ func toOperation(row db.Operation) domain.Operation {
 		ETag:        row.Etag,
 		StartedAt:   row.StartedAt,
 	}
+
 	if row.CompletedAt.Valid {
 		op.CompletedAt = &row.CompletedAt.Time
 	}
+
 	if row.ErrorCode.Valid || row.ErrorMessage.Valid {
 		op.Error = &domain.OperationError{
 			Code:    row.ErrorCode.String,
 			Message: row.ErrorMessage.String,
 		}
 	}
+
 	return op
 }
 
 func fromOperation(op domain.Operation, etag string) db.AddOperationParams {
 	var completedAt sql.NullTime
+
 	if op.CompletedAt != nil {
 		completedAt = sql.NullTime{Time: *op.CompletedAt, Valid: true}
 	}
+
 	var errorCode, errorMessage sql.NullString
+
 	if op.Error != nil {
 		errorCode = sql.NullString{String: op.Error.Code, Valid: true}
 		errorMessage = sql.NullString{String: op.Error.Message, Valid: true}
 	}
+
 	return db.AddOperationParams{
 		ID:           op.ID,
 		WorkspaceID:  op.WorkspaceID,

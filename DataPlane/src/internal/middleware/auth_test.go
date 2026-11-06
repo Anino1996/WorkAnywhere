@@ -33,9 +33,11 @@ func TestBearerAuth(t *testing.T) {
 			})
 
 			r := httptest.NewRequest(http.MethodGet, "/", nil)
+
 			if tc.header != "" {
 				r.Header.Set("Authorization", tc.header)
 			}
+
 			w := httptest.NewRecorder()
 
 			BearerAuth(token)(next).ServeHTTP(w, r)
@@ -43,6 +45,7 @@ func TestBearerAuth(t *testing.T) {
 			if w.Code != tc.wantStatus {
 				t.Errorf("status: got %d, want %d", w.Code, tc.wantStatus)
 			}
+
 			if called != tc.wantCalled {
 				t.Errorf("next called: got %v, want %v", called, tc.wantCalled)
 			}

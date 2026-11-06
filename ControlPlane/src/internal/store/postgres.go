@@ -6,11 +6,11 @@ import (
 	"embed"
 	"fmt"
 
+	"github.com/google/uuid"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/pressly/goose/v3"
 	"github.com/workanywhere/controlplane/internal/domain"
 	"github.com/workanywhere/controlplane/internal/store/db"
-	"github.com/google/uuid"
 )
 
 //go:embed migrations/*.sql
@@ -23,15 +23,19 @@ type PostgresStore struct {
 
 func NewPostgresStore(postgresURL string) (*PostgresStore, error) {
 	conn, err := sql.Open("pgx", postgresURL)
+
 	if err != nil {
 		return nil, fmt.Errorf("opening postgres connection: %w", err)
 	}
+
 	if err := conn.Ping(); err != nil {
 		return nil, fmt.Errorf("pinging postgres: %w", err)
 	}
+
 	if err := runMigrations(conn); err != nil {
 		return nil, fmt.Errorf("running migrations: %w", err)
 	}
+
 	return &PostgresStore{
 		conn:    conn,
 		queries: db.New(conn),
@@ -44,9 +48,11 @@ func (s *PostgresStore) Close() error {
 
 func runMigrations(conn *sql.DB) error {
 	goose.SetBaseFS(migrations)
+
 	if err := goose.SetDialect("postgres"); err != nil {
 		return err
 	}
+
 	return goose.Up(conn, "migrations")
 }
 
@@ -60,12 +66,15 @@ func (s *PostgresStore) GetWorkspace(ctx context.Context, accountID string, work
 		AccountID: accountID,
 		ID:        workspaceID,
 	})
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return domain.Workspace{}, ErrNotFound
 		}
+
 		return domain.Workspace{}, fmt.Errorf("getting workspace: %w", err)
 	}
+
 	return toWorkspace(row), nil
 }
 
@@ -77,12 +86,15 @@ func (s *PostgresStore) UpdateWorkspaceStatus(ctx context.Context, ws domain.Wor
 		ID:          ws.ID,
 		CurrentEtag: ws.ETag,
 	})
+
 	if err != nil {
 		return fmt.Errorf("updating workspace status: %w", err)
 	}
+
 	if rowsAffected == 0 {
 		return ErrConflict
 	}
+
 	return nil
 }
 
@@ -96,25 +108,32 @@ func (s *PostgresStore) GetOperation(ctx context.Context, accountID string, oper
 		AccountID: accountID,
 		ID:        operationID,
 	})
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return domain.Operation{}, ErrNotFound
 		}
+
 		return domain.Operation{}, fmt.Errorf("getting operation: %w", err)
 	}
+
 	return toOperation(row), nil
 }
 
 func (s *PostgresStore) UpdateOperation(ctx context.Context, accountID string, op domain.Operation) error {
 	var completedAt sql.NullTime
+
 	if op.CompletedAt != nil {
 		completedAt = sql.NullTime{Time: *op.CompletedAt, Valid: true}
 	}
+
 	var errorCode, errorMessage sql.NullString
+
 	if op.Error != nil {
 		errorCode = sql.NullString{String: op.Error.Code, Valid: true}
 		errorMessage = sql.NullString{String: op.Error.Message, Valid: true}
 	}
+
 	rowsAffected, err := s.queries.UpdateOperation(ctx, db.UpdateOperationParams{
 		Status:       string(op.Status),
 		ErrorCode:    errorCode,
@@ -125,11 +144,14 @@ func (s *PostgresStore) UpdateOperation(ctx context.Context, accountID string, o
 		ID:           op.ID,
 		CurrentEtag:  op.ETag,
 	})
+
 	if err != nil {
 		return fmt.Errorf("updating operation: %w", err)
 	}
+
 	if rowsAffected == 0 {
 		return ErrConflict
 	}
+
 	return nil
 }

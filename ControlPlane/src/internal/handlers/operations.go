@@ -27,6 +27,7 @@ func (h *OperationHandler) GetOperation(w http.ResponseWriter, r *http.Request) 
 	accountID := httputil.AccountID(r)
 
 	op, err := h.Operations.GetOperation(r.Context(), accountID, operationID)
+
 	if err != nil {
 		models.WriteError(w, http.StatusNotFound, "OPERATION_NOT_FOUND", "operation not found", httputil.ReqID(r))
 		return
@@ -38,6 +39,7 @@ func (h *OperationHandler) GetOperation(w http.ResponseWriter, r *http.Request) 
 	}
 
 	state, err := h.Container.InspectContainer(r.Context(), op.ResourceID)
+
 	if err != nil {
 		models.WriteError(w, http.StatusInternalServerError, "CONTAINER_INSPECT_FAILED", err.Error(), httputil.ReqID(r))
 		return
@@ -60,14 +62,18 @@ func (h *OperationHandler) GetOperation(w http.ResponseWriter, r *http.Request) 
 
 		go func(op domain.Operation, wsStatus domain.WorkspaceStatus) {
 			ctx := context.Background()
+
 			if err := h.Operations.UpdateOperation(ctx, op.AccountID, op); err != nil {
 				log.Printf("async: failed to update operation %s: %v", op.ID, err)
 			}
+
 			ws, err := h.Workspaces.GetWorkspace(ctx, op.AccountID, op.WorkspaceID)
+
 			if err != nil {
 				log.Printf("async: failed to fetch workspace %s: %v", op.WorkspaceID, err)
 				return
 			}
+
 			if err := h.Workspaces.UpdateWorkspaceStatus(ctx, ws, wsStatus); err != nil {
 				log.Printf("async: failed to update workspace status for %s: %v", op.WorkspaceID, err)
 			}
@@ -83,9 +89,11 @@ func resolveOperationStatus(state container.ContainerState) domain.OperationStat
 	if state.Running {
 		return domain.OperationStatusCompleted
 	}
+
 	if state.ExitCode != 0 {
 		return domain.OperationStatusFailed
 	}
+
 	return domain.OperationStatusInProgress
 }
 
@@ -109,12 +117,14 @@ func writeOperationResponse(w http.ResponseWriter, op domain.Operation) {
 		StartedAt:   op.StartedAt,
 		CompletedAt: op.CompletedAt,
 	}
+
 	if op.Error != nil {
 		resp.Error = &models.OperationErrorResponse{
 			Code:    op.Error.Code,
 			Message: op.Error.Message,
 		}
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(resp)

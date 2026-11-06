@@ -34,37 +34,45 @@ type dirResponse struct {
 func (h *DirHandler) List(w http.ResponseWriter, r *http.Request) {
 	relativePath := chi.URLParam(r, "*")
 	absolutePath, err := pathutil.SafeJoin(h.root, relativePath)
+
 	if err != nil {
 		writeError(w, r, http.StatusForbidden, "PATH_TRAVERSAL", "path traversal detected")
 		return
 	}
 
 	entries, err := os.ReadDir(absolutePath)
+
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			writeError(w, r, http.StatusNotFound, "DIR_NOT_FOUND", "directory not found")
 			return
 		}
+
 		writeError(w, r, http.StatusInternalServerError, "READ_ERROR", "failed to read directory")
 		return
 	}
 
 	items := make([]dirEntry, 0, len(entries))
+
 	for _, e := range entries {
 		info, err := e.Info()
+
 		if err != nil {
 			continue
 		}
+
 		entry := dirEntry{
 			Name:       e.Name(),
 			ModifiedAt: info.ModTime().UTC(),
 		}
+
 		if e.IsDir() {
 			entry.Type = "dir"
 		} else {
 			entry.Type = "file"
 			entry.Size = info.Size()
 		}
+
 		items = append(items, entry)
 	}
 

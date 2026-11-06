@@ -57,9 +57,11 @@ func (m *mockWorkspaceStore) UpdateWorkspaceStatus(_ context.Context, ws domain.
 	m.mu.Lock()
 	m.updatedStatus = status
 	m.mu.Unlock()
+
 	if m.updateWg != nil {
 		m.updateWg.Done()
 	}
+
 	return m.updateErr
 }
 
@@ -89,9 +91,11 @@ func (m *mockOperationStore) UpdateOperation(_ context.Context, _ string, op dom
 	m.mu.Lock()
 	m.updated = append(m.updated, op)
 	m.mu.Unlock()
+
 	if m.updateWg != nil {
 		m.updateWg.Done()
 	}
+
 	return m.updateErr
 }
 

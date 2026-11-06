@@ -13,6 +13,7 @@ func ReqID(r *http.Request) string {
 	if id := r.Header.Get("X-Request-Id"); id != "" {
 		return id
 	}
+
 	return "unknown"
 }
 
@@ -24,5 +25,6 @@ func AccountID(r *http.Request) string {
 	if id, ok := r.Context().Value(contextKeyAccountID).(string); ok {
 		return id
 	}
+
 	return ""
 }

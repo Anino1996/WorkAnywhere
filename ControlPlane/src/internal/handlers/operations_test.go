@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
 	"sync"
 	"testing"
-	"encoding/json"
 
 	"github.com/go-chi/chi/v5"
 
@@ -25,8 +25,10 @@ func TestResolveOperationStatus(t *testing.T) {
 		{container.ContainerState{Running: false, ExitCode: 1}, domain.OperationStatusFailed},
 		{container.ContainerState{Running: false, ExitCode: 0}, domain.OperationStatusInProgress},
 	}
+
 	for _, tc := range cases {
 		got := resolveOperationStatus(tc.state)
+
 		if got != tc.want {
 			t.Errorf("resolveOperationStatus(%+v) = %q, want %q", tc.state, got, tc.want)
 		}
@@ -43,8 +45,10 @@ func TestMapOperationStatusToWorkspaceStatus(t *testing.T) {
 		{domain.OperationStatusInProgress, domain.WorkspaceStatusProvisioning},
 		{domain.OperationStatusPending, domain.WorkspaceStatusProvisioning},
 	}
+
 	for _, tc := range cases {
 		got := mapOperationStatusToWorkspaceStatus(tc.status)
+
 		if got != tc.want {
 			t.Errorf("mapOperationStatusToWorkspaceStatus(%q) = %q, want %q", tc.status, got, tc.want)
 		}
@@ -74,7 +78,9 @@ func TestGetOperation(t *testing.T) {
 		if w.Code != http.StatusNotFound {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusNotFound)
 		}
+
 		assertErrorCode(t, w, "OPERATION_NOT_FOUND")
+
 		if ctr.inspectCalled {
 			t.Error("InspectContainer should not be called when operation not found")
 		}
@@ -95,7 +101,9 @@ func TestGetOperation(t *testing.T) {
 		if w.Code != http.StatusOK {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusOK)
 		}
+
 		assertOperationStatus(t, w, "COMPLETED")
+
 		if ctr.inspectCalled {
 			t.Error("InspectContainer should not be called for terminal operation")
 		}
@@ -115,6 +123,7 @@ func TestGetOperation(t *testing.T) {
 		if w.Code != http.StatusOK {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusOK)
 		}
+
 		assertOperationStatus(t, w, "FAILED")
 	})
 
@@ -130,6 +139,7 @@ func TestGetOperation(t *testing.T) {
 		if w.Code != http.StatusInternalServerError {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusInternalServerError)
 		}
+
 		assertErrorCode(t, w, "CONTAINER_INSPECT_FAILED")
 	})
 
@@ -148,10 +158,12 @@ func TestGetOperation(t *testing.T) {
 		if w.Code != http.StatusOK {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusOK)
 		}
+
 		assertOperationStatus(t, w, "IN_PROGRESS")
 		ops.mu.Lock()
 		updatedCount := len(ops.updated)
 		ops.mu.Unlock()
+
 		if updatedCount != 0 {
 			t.Errorf("UpdateOperation should not be called when status unchanged, got %d calls", updatedCount)
 		}
@@ -181,6 +193,7 @@ func TestGetOperation(t *testing.T) {
 		if w.Code != http.StatusOK {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusOK)
 		}
+
 		assertOperationStatus(t, w, "COMPLETED")
 
 		wg.Wait()
@@ -188,9 +201,11 @@ func TestGetOperation(t *testing.T) {
 		ops.mu.Lock()
 		updatedOp := ops.updated[0]
 		ops.mu.Unlock()
+
 		if updatedOp.Status != domain.OperationStatusCompleted {
 			t.Errorf("updated operation status: got %q, want %q", updatedOp.Status, domain.OperationStatusCompleted)
 		}
+
 		if updatedOp.CompletedAt == nil {
 			t.Error("updated operation CompletedAt should be set")
 		}
@@ -198,6 +213,7 @@ func TestGetOperation(t *testing.T) {
 		ws.mu.Lock()
 		updatedWsStatus := ws.updatedStatus
 		ws.mu.Unlock()
+
 		if updatedWsStatus != domain.WorkspaceStatusActive {
 			t.Errorf("updated workspace status: got %q, want %q", updatedWsStatus, domain.WorkspaceStatusActive)
 		}
@@ -229,15 +245,19 @@ func TestGetOperation(t *testing.T) {
 		}
 
 		var resp models.OperationResponse
+
 		if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
 			t.Fatalf("decode: %v", err)
 		}
+
 		if resp.Status != "FAILED" {
 			t.Errorf("status: got %q, want %q", resp.Status, "FAILED")
 		}
+
 		if resp.Error == nil {
 			t.Fatal("expected error field to be set")
 		}
+
 		if resp.Error.Code != "CONTAINER_EXITED" {
 			t.Errorf("error code: got %q, want %q", resp.Error.Code, "CONTAINER_EXITED")
 		}
@@ -247,6 +267,7 @@ func TestGetOperation(t *testing.T) {
 		ws.mu.Lock()
 		updatedWsStatus := ws.updatedStatus
 		ws.mu.Unlock()
+
 		if updatedWsStatus != domain.WorkspaceStatusProvisioning {
 			t.Errorf("updated workspace status: got %q, want %q", updatedWsStatus, domain.WorkspaceStatusProvisioning)
 		}
@@ -285,9 +306,11 @@ func TestGetOperation(t *testing.T) {
 func assertOperationStatus(t *testing.T, w *httptest.ResponseRecorder, status string) {
 	t.Helper()
 	var resp models.OperationResponse
+
 	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
 		t.Fatalf("decode operation response: %v", err)
 	}
+
 	if resp.Status != status {
 		t.Errorf("operation status: got %q, want %q", resp.Status, status)
 	}

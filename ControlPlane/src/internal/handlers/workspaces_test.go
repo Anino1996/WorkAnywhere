@@ -32,18 +32,23 @@ func TestCreateWorkspace(t *testing.T) {
 		}
 
 		var resp models.CreateWorkspaceResponse
+
 		if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
 			t.Fatalf("decode response: %v", err)
 		}
+
 		if resp.WorkspaceID == "" {
 			t.Error("workspace_id is empty")
 		}
+
 		if resp.OperationID == "" {
 			t.Error("operation_id is empty")
 		}
+
 		if resp.Status != string(domain.WorkspaceStatusProvisioning) {
 			t.Errorf("status: got %q, want %q", resp.Status, domain.WorkspaceStatusProvisioning)
 		}
+
 		if resp.CreatedAt.IsZero() {
 			t.Error("created_at is zero")
 		}
@@ -51,13 +56,17 @@ func TestCreateWorkspace(t *testing.T) {
 		if len(ws.created) != 1 {
 			t.Fatalf("expected 1 created workspace, got %d", len(ws.created))
 		}
+
 		created := ws.created[0]
+
 		if created.ResourceID != "ctr-1" {
 			t.Errorf("resourceID: got %q, want %q", created.ResourceID, "ctr-1")
 		}
+
 		if created.AccountID != "acc-1" {
 			t.Errorf("accountID: got %q, want %q", created.AccountID, "acc-1")
 		}
+
 		if created.Status != domain.WorkspaceStatusProvisioning {
 			t.Errorf("workspace status: got %q, want %q", created.Status, domain.WorkspaceStatusProvisioning)
 		}
@@ -65,16 +74,21 @@ func TestCreateWorkspace(t *testing.T) {
 		if len(ops.added) != 1 {
 			t.Fatalf("expected 1 added operation, got %d", len(ops.added))
 		}
+
 		addedOp := ops.added[0]
+
 		if addedOp.WorkspaceID != created.ID {
 			t.Errorf("operation.WorkspaceID: got %q, want %q", addedOp.WorkspaceID, created.ID)
 		}
+
 		if addedOp.ResourceID != "ctr-1" {
 			t.Errorf("operation.ResourceID: got %q, want %q", addedOp.ResourceID, "ctr-1")
 		}
+
 		if addedOp.Type != domain.OperationTypeProvision {
 			t.Errorf("operation.Type: got %q, want %q", addedOp.Type, domain.OperationTypeProvision)
 		}
+
 		if addedOp.Status != domain.OperationStatusInProgress {
 			t.Errorf("operation.Status: got %q, want %q", addedOp.Status, domain.OperationStatusInProgress)
 		}
@@ -91,7 +105,9 @@ func TestCreateWorkspace(t *testing.T) {
 		if w.Code != http.StatusBadRequest {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusBadRequest)
 		}
+
 		assertErrorCode(t, w, "INVALID_REQUEST_BODY")
+
 		if ctr.createCalled {
 			t.Error("CreateContainer should not be called when name is missing")
 		}
@@ -108,7 +124,9 @@ func TestCreateWorkspace(t *testing.T) {
 		if w.Code != http.StatusBadRequest {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusBadRequest)
 		}
+
 		assertErrorCode(t, w, "INVALID_REQUEST_BODY")
+
 		if ctr.createCalled {
 			t.Error("CreateContainer should not be called on malformed JSON")
 		}
@@ -126,7 +144,9 @@ func TestCreateWorkspace(t *testing.T) {
 		if w.Code != http.StatusInternalServerError {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusInternalServerError)
 		}
+
 		assertErrorCode(t, w, "CONTAINER_CREATE_FAILED")
+
 		if len(ws.created) != 0 {
 			t.Error("CreateWorkspace should not be called after container failure")
 		}
@@ -145,7 +165,9 @@ func TestCreateWorkspace(t *testing.T) {
 		if w.Code != http.StatusInternalServerError {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusInternalServerError)
 		}
+
 		assertErrorCode(t, w, "STORAGE_ERROR")
+
 		if len(ops.added) != 0 {
 			t.Error("AddOperation should not be called after workspace store failure")
 		}
@@ -163,6 +185,7 @@ func TestCreateWorkspace(t *testing.T) {
 		if w.Code != http.StatusInternalServerError {
 			t.Fatalf("status: got %d, want %d", w.Code, http.StatusInternalServerError)
 		}
+
 		assertErrorCode(t, w, "STORAGE_ERROR")
 	})
 
@@ -176,9 +199,11 @@ func TestCreateWorkspace(t *testing.T) {
 		h.CreateWorkspace(w, r)
 
 		var resp models.ErrorResponse
+
 		if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
 			t.Fatalf("decode: %v", err)
 		}
+
 		if resp.Error.RequestID != "test-req-id" {
 			t.Errorf("request_id: got %q, want %q", resp.Error.RequestID, "test-req-id")
 		}
@@ -188,9 +213,11 @@ func TestCreateWorkspace(t *testing.T) {
 func assertErrorCode(t *testing.T, w *httptest.ResponseRecorder, code string) {
 	t.Helper()
 	var resp models.ErrorResponse
+
 	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
 		t.Fatalf("decode error response: %v", err)
 	}
+
 	if resp.Error.Code != code {
 		t.Errorf("error code: got %q, want %q", resp.Error.Code, code)
 	}

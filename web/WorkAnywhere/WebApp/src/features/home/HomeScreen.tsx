@@ -237,6 +237,7 @@ function CreateWorkspaceSheet({ open, onClose }: { open: boolean; onClose: () =>
   const create = async () => {
     if (!name.trim()) return;
     setSubmitting(true);
+
     try {
       const res = await getControlPlane().createWorkspace({ name: name.trim() });
       setActiveWorkspace(res.workspace_id);

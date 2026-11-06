@@ -25,13 +25,17 @@ export function SettingsScreen(): JSX.Element {
 
   const reset = () => {
     resetMockControlPlane();
+
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
+
       if (k?.startsWith("caw.mock.dp.")) {
         const wsId = k.replace("caw.mock.dp.", "").replace(".v1", "");
+
         if (wsId) resetMockDataPlane(wsId);
       }
     }
+
     useUIStore.getState().setActiveWorkspace(null);
     resetDemo();
     setResetFlash("Demo data reset. Reloading…");

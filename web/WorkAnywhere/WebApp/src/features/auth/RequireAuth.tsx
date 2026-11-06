@@ -7,8 +7,10 @@ export function RequireAuth({ children }: { children: ReactNode }): JSX.Element 
   ensureDemoSession();
   const session = useAuthStore((s) => s.session);
   const location = useLocation();
+
   if (!session) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
+
   return <>{children}</>;
 }

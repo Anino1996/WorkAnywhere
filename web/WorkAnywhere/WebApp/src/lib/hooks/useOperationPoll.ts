@@ -34,6 +34,7 @@ export function useOperationPoll(
 
     const tick = async () => {
       if (cancelled) return;
+
       if (Date.now() > stopAt) {
         setState((s) => ({
           ...s,
@@ -42,11 +43,14 @@ export function useOperationPoll(
         }));
         return;
       }
+
       try {
         const op = await getControlPlane().getOperation(operationId);
+
         if (cancelled) return;
         onUpdateRef.current?.(op);
         setState({ operation: op, error: null, done: op.status === "COMPLETED" || op.status === "FAILED" });
+
         if (op.status !== "COMPLETED" && op.status !== "FAILED") {
           timerId = window.setTimeout(tick, POLL_INTERVAL_MS);
         }
@@ -59,6 +63,7 @@ export function useOperationPoll(
     void tick();
     return () => {
       cancelled = true;
+
       if (timerId != null) clearTimeout(timerId);
     };
   }, [operationId]);

@@ -15,6 +15,7 @@ export function FilesScreen(): JSX.Element {
   const [params] = useSearchParams();
   const wsId = params.get("ws") ?? useUIStore.getState().activeWorkspaceId ?? "";
   const setActiveWorkspace = useUIStore((s) => s.setActiveWorkspace);
+
   if (wsId) setActiveWorkspace(wsId);
   const [path, setPath] = useState("");
   const listing = useDirListing(wsId, path);
@@ -76,6 +77,7 @@ export function FilesScreen(): JSX.Element {
           loading={listing.isLoading}
           onOpen={(e) => {
             const child = path ? `${path}/${e.name}` : e.name;
+
             if (e.type === "directory") {
               setPath(child);
               setSelectedFile(null);
@@ -109,6 +111,7 @@ function FileList({
       </div>
     );
   }
+
   if (entries.length === 0) {
     return (
       <div className="mt-12 flex flex-col items-center text-center text-sm uppercase tracking-label text-muted-text">
@@ -117,6 +120,7 @@ function FileList({
       </div>
     );
   }
+
   return (
     <Card className="divide-y-2 divide-border">
       {entries.map((e) => (
@@ -202,6 +206,7 @@ function truncate(s?: string) {
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
+
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }

@@ -27,11 +27,13 @@ export const useDemoStore = create<DemoState>((set, get) => ({
   queuePartialFailOnIndex: (index) => set({ nextApplyPartialFailOnIndex: index, forcePartialFailOnce: true }),
   consumePreconditionFail: () => {
     const v = get().nextApplyPreconditionFail;
+
     if (v) set({ nextApplyPreconditionFail: false });
     return v;
   },
   consumePartialFail: () => {
     const v = get().forcePartialFailOnce;
+
     if (v) set({ forcePartialFailOnce: false, nextApplyPartialFailOnIndex: null });
     return v;
   },
@@ -47,5 +49,6 @@ export const useDemoStore = create<DemoState>((set, get) => ({
 export const demoDelay = async (ms: number = 0): Promise<void> => {
   const demo = useDemoStore.getState();
   const total = ms + demo.slowMs;
+
   if (total > 0) await new Promise((r) => setTimeout(r, total));
 };

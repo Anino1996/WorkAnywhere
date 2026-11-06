@@ -36,8 +36,10 @@ interface Stored {
 function load(): Stored {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
+
     if (raw) return JSON.parse(raw) as Stored;
   } catch {}
+
   return { workspaces: seededWorkspaces, operations: [], startedAt: Date.now() };
 }
 
@@ -131,6 +133,7 @@ export class MockControlPlane implements ControlPlaneClient {
   async listWorkspaces(params?: ListWorkspacesParams): Promise<ListWorkspacesResponse> {
     await demoDelay(80);
     let ws = [...state.workspaces];
+
     if (params?.status) ws = ws.filter((w) => w.status === params.status);
     const limit = params?.limit ?? 20;
     const start =
@@ -147,6 +150,7 @@ export class MockControlPlane implements ControlPlaneClient {
   async getWorkspace(id: string): Promise<Workspace> {
     await demoDelay(60);
     const w = state.workspaces.find((x) => x.workspace_id === id);
+
     if (!w) throw failureExpected("WORKSPACE_NOT_FOUND", `No workspace found with id ${id}`);
     return { ...w };
   }
@@ -174,13 +178,16 @@ export class MockControlPlane implements ControlPlaneClient {
   async saveWorkspace(id: string, _input: SaveWorkspaceInput): Promise<OperationResponse> {
     await demoDelay(120);
     const w = state.workspaces.find((x) => x.workspace_id === id);
+
     if (!w) throw failureExpected("WORKSPACE_NOT_FOUND", `No workspace found with id ${id}`);
+
     if (w.status !== "ACTIVE") {
       throw new ApiCallError(
         { code: "WRONG_STATE", message: `Workspace must be ACTIVE to save (was ${w.status})`, request_id: uid("req") },
         422,
       );
     }
+
     const op_id = scheduleOperation(id, "SAVE", "SAVING", new Date());
     return { workspace_id: id, status: "SAVING", operation_id: op_id };
   }
@@ -188,13 +195,16 @@ export class MockControlPlane implements ControlPlaneClient {
   async resumeWorkspace(id: string): Promise<OperationResponse> {
     await demoDelay(120);
     const w = state.workspaces.find((x) => x.workspace_id === id);
+
     if (!w) throw failureExpected("WORKSPACE_NOT_FOUND", `No workspace found with id ${id}`);
+
     if (w.status !== "SAVED") {
       throw new ApiCallError(
         { code: "WRONG_STATE", message: `Workspace must be SAVED to resume (was ${w.status})`, request_id: uid("req") },
         422,
       );
     }
+
     const op_id = scheduleOperation(id, "RESUME", "RESUMING", new Date());
     return { workspace_id: id, status: "RESUMING", operation_id: op_id };
   }
@@ -202,13 +212,16 @@ export class MockControlPlane implements ControlPlaneClient {
   async deleteWorkspace(id: string, force?: boolean): Promise<OperationResponse> {
     await demoDelay(120);
     const w = state.workspaces.find((x) => x.workspace_id === id);
+
     if (!w) throw failureExpected("WORKSPACE_NOT_FOUND", `No workspace found with id ${id}`);
+
     if (w.status === "ACTIVE" && !force) {
       throw new ApiCallError(
         { code: "WORKSPACE_ACTIVE", message: "Workspace is ACTIVE; pass force=true to delete", request_id: uid("req") },
         422,
       );
     }
+
     const op_id = scheduleOperation(id, "DELETE", "DELETING", new Date());
     return { workspace_id: id, status: "DELETING", operation_id: op_id };
   }
@@ -216,6 +229,7 @@ export class MockControlPlane implements ControlPlaneClient {
   async getOperation(id: string): Promise<Operation> {
     await demoDelay(40);
     const o = state.operations.find((x) => x.operation_id === id);
+
     if (!o) throw failureExpected("OPERATION_NOT_FOUND", `No operation found with id ${id}`);
     return { ...o };
   }
@@ -223,7 +237,9 @@ export class MockControlPlane implements ControlPlaneClient {
   async listOperations(params?: ListOperationsParams): Promise<ListOperationsResponse> {
     await demoDelay(80);
     let ops = [...state.operations];
+
     if (params?.workspace_id) ops = ops.filter((o) => o.workspace_id === params.workspace_id);
+
     if (params?.status) ops = ops.filter((o) => o.status === params.status);
     const limit = params?.limit ?? 20;
     return { operations: ops.slice(0, limit) };

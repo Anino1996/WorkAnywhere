@@ -25,18 +25,22 @@ class TestDP implements DataPlaneClient {
   }
   async getFile(path: string): Promise<FileRead> {
     const f = this.files.get(path);
+
     if (!f) throw new ApiCallError({ code: "NOT_FOUND", message: path, request_id: "t" }, 404);
     return { content: f.content.slice(), etag: f.etag, contentType: "text" };
   }
   async putFile(path: string, content: Uint8Array, ifMatch?: string): Promise<FileWriteResult> {
     const existing = this.files.get(path);
+
     if (this.failNextPutIfMatch) {
       this.failNextPutIfMatch = false;
       throw new ApiCallError({ code: "ETAG_MISMATCH", message: "demo", request_id: "t" }, 412);
     }
+
     if (ifMatch != null && (!existing || existing.etag !== ifMatch)) {
       throw new ApiCallError({ code: "ETAG_MISMATCH", message: "", request_id: "t" }, 412);
     }
+
     const created = !existing;
     this.set(path, content);
     return { etag: etagFor(content), created };
@@ -145,6 +149,7 @@ describe("ChangeSetApplier.applyAll", () => {
       const f = await original(path);
       return { ...f, etag: '"staleetag12345678"' };
     };
+
     const applier = new ChangeSetApplier(dp);
     const cs = make([
       { path: "a.txt", op: { kind: "searchReplace", blocks: [{ search: "alpha", replace: "ALPHA" }] }, undoable: false },

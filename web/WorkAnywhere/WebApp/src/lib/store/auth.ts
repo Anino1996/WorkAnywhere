@@ -20,8 +20,10 @@ export interface AuthState {
 function load(): Session | null {
   try {
     const raw = localStorage.getItem(SESSION_KEY);
+
     if (raw) return JSON.parse(raw) as Session;
   } catch {}
+
   return null;
 }
 

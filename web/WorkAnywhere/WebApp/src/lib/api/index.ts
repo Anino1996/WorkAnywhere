@@ -18,10 +18,12 @@ const useMocks = (import.meta.env.VITE_USE_MOCKS ?? "1") !== "0";
 let cp: ControlPlaneClient | null = null;
 export function getControlPlane(): ControlPlaneClient {
   if (cp) return cp;
+
   if (useMocks) {
     cp = new MockControlPlane();
     return cp;
   }
+
   throw new Error(
     "HTTP ControlPlaneClient not yet implemented. Set VITE_USE_MOCKS=1 (default).",
   );
@@ -34,6 +36,7 @@ export function getDataPlane(workspaceId: string): DataPlaneClient {
   if (useMocks) {
     return new MockDataPlane(workspaceId);
   }
+
   throw new Error(
     "HTTP DataPlaneClient not yet implemented. Set VITE_USE_MOCKS=1 (default).",
   );

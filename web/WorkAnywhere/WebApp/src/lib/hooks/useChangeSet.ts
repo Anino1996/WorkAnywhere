@@ -30,6 +30,7 @@ export function useChangeSet(
     if (!changeSet || changeSet.edits.length === 0) return null;
     setApplying(true);
     setError(null);
+
     try {
       const dp = getDataPlane(workspaceId);
       const applier = new ChangeSetApplier(dp);
@@ -49,6 +50,7 @@ export function useChangeSet(
     if (!changeSet || changeSet.edits.length === 0) return null;
     setUndoing(true);
     setError(null);
+
     try {
       const dp = getDataPlane(workspaceId);
       const applier = new ChangeSetApplier(dp);

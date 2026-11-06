@@ -51,9 +51,11 @@ export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsu
     (async () => {
       const dp = getDataPlane(workspaceId);
       const out: FilePreview[] = [];
+
       try {
         for (const edit of changeSet.edits) {
           let before: string | undefined;
+
           if (edit.op.kind !== "create") {
             try {
               const file = await dp.getFile(edit.path);
@@ -64,6 +66,7 @@ export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsu
               void err;
             }
           }
+
           const p = diffForEdit(edit, before);
           out.push({
             edit,
@@ -82,6 +85,7 @@ export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsu
                     : undefined,
           });
         }
+
         if (!cancelled) {
           setPreviews(out);
           setActiveIndex(0);
@@ -92,6 +96,7 @@ export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsu
         if (!cancelled) setLoadingPreviews(false);
       }
     })();
+
     return () => {
       cancelled = true;
     };
@@ -107,7 +112,9 @@ export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsu
   // Determine current overall status: pending / applied / undone / failed / partial.
   const status: "pending" | "applied" | "undone" | "failed" | "partial" = useMemo(() => {
     if (lastApply && !lastApply.ok) return lastApply.failed.length > 0 && lastApply.applied.length > 0 ? "partial" : "failed";
+
     if (lastApply?.ok) return "applied";
+
     if (lastUndo) return lastUndo.ok ? "undone" : "partial";
     return "pending";
   }, [lastApply, lastUndo]);
@@ -116,6 +123,7 @@ export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsu
     const result = await apply(() => {
       onConsumed?.({ ...changeSet, status: "applied" });
     });
+
     if (result && result.ok) {
       onConsumed?.({ ...changeSet, status: "applied" });
     } else if (result) {
@@ -130,6 +138,7 @@ export function DiffReviewSheet({ open, onClose, workspaceId, changeSet, onConsu
     const result = await undo(() => {
       onConsumed?.({ ...changeSet, status: "undone" });
     });
+
     if (result && result.ok) {
       onConsumed?.({ ...changeSet, status: "undone" });
     } else if (result) {

@@ -16,6 +16,7 @@ export function useWorkspaces(params?: ListWorkspacesParams): UseQueryResult<Wor
     refetchInterval: (q) => {
       // Re-poll more aggressively when any workspace is mid-transition.
       const data = q.state.data;
+
       if (!data) return 2000;
       const busy = data.workspaces.some((w) =>
         ["PROVISIONING", "SAVING", "RESUMING", "DELETING"].includes(w.status),
@@ -35,6 +36,7 @@ export function useWorkspace(id: string | null): UseQueryResult<Workspace> {
     enabled: id != null,
     refetchInterval: (q) => {
       const data = q.state.data;
+
       if (!data) return 1000;
       return ["PROVISIONING", "SAVING", "RESUMING", "DELETING"].includes(data.status)
         ? 1000

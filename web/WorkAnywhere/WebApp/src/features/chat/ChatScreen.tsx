@@ -37,6 +37,7 @@ export function ChatScreen(): JSX.Element {
 
   const send = () => {
     const text = draft.trim();
+
     if (!text) return;
     addMessage(wsId, makeMessage("user", text));
     setDraft("");
@@ -44,6 +45,7 @@ export function ChatScreen(): JSX.Element {
     setTimeout(() => {
       const reply = stubReply(text);
       addMessage(wsId, makeMessage("ai", reply.text, reply.changeSet));
+
       if (reply.changeSet) setCurrentChangeSet(wsId, reply.changeSet);
       setThinking(false);
     }, 700);
@@ -139,6 +141,7 @@ interface Props {
 
 function Message({ message, onViewChanges }: Props) {
   const isUser = message.role === "user";
+
   if (isUser) {
     return (
       <div className="flex justify-end">
@@ -148,6 +151,7 @@ function Message({ message, onViewChanges }: Props) {
       </div>
     );
   }
+
   return (
     <div className="flex flex-col gap-2">
       <div className="max-w-[88%] border-2 brutal-border bg-muted px-3.5 py-2.5 text-sm leading-relaxed">

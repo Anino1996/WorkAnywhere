@@ -20,11 +20,13 @@ export function countOccurrences(haystack: string, needle: string): MatchResult 
   let i = 0;
   let line = 1;
   let col = 1;
+
   while (i <= haystack.length - needle.length) {
     if (haystack.startsWith(needle, i)) {
       locations.push({ line, column: col });
       // advance past the match
       const matched = needle;
+
       for (const ch of matched) {
         if (ch === "\n") {
           line += 1;
@@ -33,6 +35,7 @@ export function countOccurrences(haystack: string, needle: string): MatchResult 
           col += 1;
         }
       }
+
       i += needle.length;
     } else {
       if (haystack[i] === "\n") {
@@ -41,9 +44,11 @@ export function countOccurrences(haystack: string, needle: string): MatchResult 
       } else {
         col += 1;
       }
+
       i += 1;
     }
   }
+
   return { count: locations.length, locations };
 }
 
@@ -68,14 +73,18 @@ export function applyBlock(content: string, block: EditBlock): string {
   if (block.search.length === 0) {
     throw new BlockApplyError("search_empty", "Empty search string is not allowed");
   }
+
   const { count, locations } = countOccurrences(content, block.search);
+
   if (block.replaceAll) {
     if (count < 1) {
       throw new BlockApplyError("search_not_found", `search not found in file`, locations);
     }
+
     // Global replace.
     return content.split(block.search).join(block.replace);
   }
+
   switch (count) {
     case 0:
       throw new BlockApplyError("search_not_found", `search not found`, locations);

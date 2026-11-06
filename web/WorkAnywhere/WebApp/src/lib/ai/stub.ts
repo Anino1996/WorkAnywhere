@@ -120,30 +120,35 @@ const GENERIC_REPLIES = [
 
 export function stubReply(message: string): StubReply {
   const m = message.toLowerCase();
+
   if (m.includes("auth")) {
     return {
       text: "I'll add input validation to `authenticate` and handle the new `AuthError` in `app.py`. Two files changed.",
       changeSet: authChangeSet(),
     };
   }
+
   if (m.includes("test")) {
     return {
       text: "Adding two tests for `authenticate` — happy path and rejected empty token.",
       changeSet: testChangeSet(),
     };
   }
+
   if (m.includes("rewrite") || m.includes("large")) {
     return {
       text: "Rewriting `data/weights.json` with a small replacement. The original is too large for in-memory Undo, so Apply proceeds but Undo is disabled for this file.",
       changeSet: largeChangeSet(),
     };
   }
+
   if (m.includes("ambiguous")) {
     return {
       text: "Trying to rename `user.` → `actor.` everywhere. Your client's applier will reject this as ambiguous (5+ matches) — exactly the safe behaviour.",
       changeSet: ambiguousChangeSet(),
     };
   }
+
   return { text: GENERIC_REPLIES[Math.floor(Math.random() * GENERIC_REPLIES.length)] };
 }
 

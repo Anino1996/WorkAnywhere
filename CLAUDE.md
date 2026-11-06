@@ -7,6 +7,7 @@
 ## Code Style
 
 - Always be explicit with types. Every function and method definition must show the type of every argument and must always include return types.
+- Separate control-flow blocks (`if`, `for`, `switch`, `while`, `try`, etc.) from surrounding statements: a blank line before the block and a blank line after its closing brace. Exceptions: no blank line between a closing brace and its `else` / `else if` / `catch` / `finally` continuation, and none required when the block is the first or last statement inside an enclosing block.
 - Use idiomatic Go patterns for backend services. When asked for the "idiomatic Go approach", reference conventions from Kubernetes, Docker, etcd, and the Go standard library as authoritative examples.
 - Avoid comments unless absolutely necessary. Code should be self-explanatory through clear naming. Do not add doc comments, section dividers, or inline explanations of what the code does.
 

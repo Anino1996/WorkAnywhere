@@ -35,9 +35,11 @@ function computeNewContent(current: string, op: FileEditOp): string {
   switch (op.kind) {
     case "searchReplace":
       let acc = current;
+
       for (const block of op.blocks) {
         acc = applyBlock(acc, block);
       }
+
       return acc;
     case "create":
       return op.content;
@@ -66,6 +68,7 @@ type InverseOp = FileEditOp;
 function inverseOf(edit: FileEdit): InverseOp | null {
   if (!edit.undoable) return null;
   const op = edit.op;
+
   switch (op.kind) {
     case "searchReplace": {
       // Each non-replaceAll block -> swap search <-> replace.
@@ -74,6 +77,7 @@ function inverseOf(edit: FileEdit): InverseOp | null {
         if (!edit.oldContent) return null;
         return { kind: "rewrite", oldContent: "", newContent: edit.oldContent };
       }
+
       const swapped: EditBlock[] = op.blocks.map((b) => ({
         search: b.replace,
         replace: b.search,
@@ -81,6 +85,7 @@ function inverseOf(edit: FileEdit): InverseOp | null {
       }));
       return { kind: "searchReplace", blocks: swapped };
     }
+
     case "create":
       // Inverse is delete; carried out as a delete with oldContent.
       return { kind: "delete", oldContent: "" };
@@ -113,15 +118,19 @@ export class ChangeSetApplier {
 
     for (let i = 0; i < edits.length; i++) {
       const edit = edits[i];
+
       try {
         await this.applyOne(edit);
         applied.push(edit.path);
       } catch (err) {
         failed.push({ path: edit.path, reason: this.describe(err) });
+
         // Walk back already-applied edits via their inverses (best-effort).
         for (let j = applied.length - 1; j >= 0; j--) {
           const done = edits.find((e) => e.path === applied[j]);
+
           if (!done) continue;
+
           try {
             await this.undoOne(done);
             rolledBack.push(done.path);
@@ -129,6 +138,7 @@ export class ChangeSetApplier {
             // Swallow rollback errors; we surface partial-failure as a whole.
           }
         }
+
         return {
           ok: false,
           applied,
@@ -138,6 +148,7 @@ export class ChangeSetApplier {
         };
       }
     }
+
     return { ok: true, applied, failed, rolledBack };
   }
 
@@ -145,6 +156,7 @@ export class ChangeSetApplier {
     const op = edit.op;
     let currentContent = "";
     let readETag: string | undefined;
+
     // For all ops except create we need the current content + read-time ETag.
     if (op.kind !== "create") {
       const cur = await this.dp.getFile(edit.path);
@@ -177,12 +189,15 @@ export class ChangeSetApplier {
       edit.undoable = true;
       return;
     }
+
     const bytes = enc.encode(currentContent);
+
     if (bytes.length > STASH_CAP_BYTES) {
       edit.undoable = false;
       edit.undoableReason = `too large to undo locally (${(bytes.length / 1_000_000).toFixed(1)} MB > 1 MB cap)`;
       return;
     }
+
     edit.undoable = true;
     edit.oldContent = currentContent;
   }
@@ -190,13 +205,16 @@ export class ChangeSetApplier {
   async undoAll(edits: FileEdit[]): Promise<UndoOutcome> {
     const undone: string[] = [];
     const skipped: { path: string; reason: string }[] = [];
+
     // Reverse order.
     for (let i = edits.length - 1; i >= 0; i--) {
       const edit = edits[i];
+
       if (!edit.undoable) {
         skipped.push({ path: edit.path, reason: edit.undoableReason ?? "not undoable" });
         continue;
       }
+
       try {
         await this.undoOne(edit);
         undone.push(edit.path);
@@ -208,6 +226,7 @@ export class ChangeSetApplier {
         }
       }
     }
+
     return {
       ok: skipped.length === 0,
       undone,
@@ -221,8 +240,10 @@ export class ChangeSetApplier {
 
   private async undoOne(edit: FileEdit): Promise<void> {
     const inv = inverseOf(edit);
+
     if (!inv) throw new BlockApplyError("search_ambiguous", `no inverse for ${edit.path}`);
     const guard = edit.postApplyETag; // If-Match guard for undo.
+
     switch (inv.kind) {
       case "create": {
         // Inverse of original `delete`. The file no longer exists post-Apply,
@@ -233,25 +254,32 @@ export class ChangeSetApplier {
         await this.dp.putFile(edit.path, bytes);
         return;
       }
+
       case "delete": {
         await this.dp.deleteFile(edit.path);
         return;
       }
+
       case "rewrite": {
         const bytes = enc.encode(inv.newContent);
         await this.dp.putFile(edit.path, bytes, guard);
         return;
       }
+
       case "searchReplace": {
         // need current content + read-time guard
         const cur = await this.dp.getFile(edit.path);
+
         if (guard && cur.etag !== guard) {
           throw new ApiCallError({ code: "ETAG_MISMATCH", message: "undo precondition failed", request_id: "local" }, 412);
         }
+
         let content = textContent(cur.content);
+
         for (const block of inv.blocks) {
           content = applyBlock(content, block);
         }
+
         const bytes = enc.encode(content);
         await this.dp.putFile(edit.path, bytes, cur.etag);
         return;
@@ -261,7 +289,9 @@ export class ChangeSetApplier {
 
   private describe(err: unknown): string {
     if (err instanceof BlockApplyError) return `${err.code}: ${err.message}`;
+
     if (err instanceof ApiCallError) return `${err.detail.code}: ${err.detail.message}`;
+
     if (err instanceof Error) return err.message;
     return String(err);
   }

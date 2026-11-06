@@ -8,10 +8,12 @@ const MASK64 = 0xffffffffffffffffn;
 
 export function hashContent(content: Uint8Array): string {
   let h = FNV64_OFFSET;
+
   for (let i = 0; i < content.length; i++) {
     h = (h ^ BigInt(content[i])) & MASK64;
     h = (h * FNV64_PRIME) & MASK64;
   }
+
   // Avalanche for better distribution.
   h = (h ^ (h >> 33n)) * 0xff51afd7ed558ccdn & MASK64;
   h = (h ^ (h >> 29n)) * 0xc4ceb9fe1a85ec53n & MASK64;

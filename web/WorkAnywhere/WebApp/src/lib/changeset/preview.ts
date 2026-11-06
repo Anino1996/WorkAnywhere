@@ -41,10 +41,12 @@ export function diffForEdit(
       break;
     case "searchReplace": {
       let acc = before;
+
       try {
         for (const block of op.blocks) {
           acc = applyBlock(acc, block);
         }
+
         after = acc;
       } catch (err) {
         if (err instanceof Error) {
@@ -52,11 +54,14 @@ export function diffForEdit(
         } else {
           applyError = { code: "block_apply_error", message: String(err) };
         }
+
         after = before; // no change
       }
+
       break;
     }
   }
+
   const lines = diffLines(before, after);
   return { before, after, lines, applyError };
 }

@@ -28,6 +28,7 @@ describe("applyBlock", () => {
 
   it("rejects ambiguous matches with structured error", () => {
     expect(() => applyBlock("foo foo foo", { search: "foo", replace: "bar" })).toThrow(BlockApplyError);
+
     try {
       applyBlock("foo foo foo", { search: "foo", replace: "bar" });
     } catch (e) {

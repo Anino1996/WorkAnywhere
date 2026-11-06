@@ -29,8 +29,10 @@ export interface UIState {
 function loadModel(): AiModel {
   try {
     const v = localStorage.getItem(MODEL_KEY) as AiModel | null;
+
     if (v === "gpt-4" || v === "claude" || v === "gemini") return v;
   } catch {}
+
   return "claude";
 }
 

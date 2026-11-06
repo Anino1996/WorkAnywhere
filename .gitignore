@@ -1,0 +1,50 @@
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- Editors / IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Environment & secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Logs ---
+*.log
+
+# --- Go (ControlPlane / DataPlane) ---
+# Compiled binaries and test artifacts
+*.exe
+*.test
+*.out
+*.prof
+coverage.out
+dist/
+bin/
+
+# --- Node / Web (web/WorkAnywhere) ---
+node_modules/
+.vite/
+.cache/
+coverage/
+*.tsbuildinfo
+.pnpm-store/
+
+# --- Xcode / iOS ---
+# Per-user project state
+xcuserdata/
+*.xcuserstate
+# Build products
+build/
+DerivedData/
+*.ipa
+*.dSYM
+*.xcarchive
+
+# --- Claude Code local settings ---
+.claude/settings.local.json
